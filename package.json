@@ -1,0 +1,23 @@
+{
+    "devDependencies": {
+        "@symfony/webpack-encore": "^0.29.0",
+        "core-js": "^3.0.0",
+        "regenerator-runtime": "^0.13.2",
+        "webpack-notifier": "^1.6.0"
+    },
+    "license": "UNLICENSED",
+    "private": true,
+    "scripts": {
+        "dev-server": "encore dev-server --public http://margin-calculator.test:8080 --host 0.0.0.0 --disable-host-check",
+        "dev": "encore dev --public http://margin-calculator.test:8080 --host 0.0.0.0 --disable-host-check --watch --hot",
+        "watch": "encore dev --watch",
+        "build": "encore production --progress"
+    },
+    "dependencies": {
+        "axios": "^0.19.2",
+        "vee-validate": "^3.3.0",
+        "vue": "^2.6.11",
+        "vue-loader": "^15.9.1",
+        "vue-template-compiler": "^2.6.11"
+    }
+}
