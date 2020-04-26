@@ -10,6 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Traits\Validator;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @method Transactions|null find($id, $lockMode = null, $lockVersion = null)
@@ -37,8 +38,9 @@ class TransactionsRepository extends ServiceEntityRepository
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getTransactions(array $transactions):array
+    public function getTransactions():array
     {
+        $transactions = $this->findAll();
         $data = [];
 
         foreach ($transactions as $transaction) {
@@ -59,7 +61,7 @@ class TransactionsRepository extends ServiceEntityRepository
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function saveTransaction(array $data)
+    public function saveTransaction(array $data):void
     {
         $transaction = new Transactions();
         $stockCount = (int) $this->stock->countStock();
@@ -67,6 +69,11 @@ class TransactionsRepository extends ServiceEntityRepository
         $type = $data['type']??null;
         $quantity = $data['quantity']??null;
         $price = $data['price']??null;
+
+        if (empty($type) || empty($quantity) || empty($price)) {
+            throw new NotFoundHttpException('Expecting mandatory parameters!');
+        }
+
         $this->transactionValidate($type, $quantity, $price, $stockCount);
 
         if (2 === $type) {
@@ -86,13 +93,18 @@ class TransactionsRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return int
+     * @return float
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function stockCount():int
+    public function calculateMarginProfit(): float
     {
-        return (int) $this->stock->countStock();
+        $marginProfit = $this->createQueryBuilder('s')
+            ->select('SUM(s.profit)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return (float) $marginProfit;
     }
 
     /**

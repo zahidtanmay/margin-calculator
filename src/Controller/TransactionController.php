@@ -37,8 +37,7 @@ class TransactionController extends AbstractController
      */
     public function index(): JsonResponse
     {
-        $transactions = $this->transaction->findAll();
-        $data = $this->transaction->getTransactions($transactions);
+        $data = $this->transaction->getTransactions();
 
         return new JsonResponse($data, Response::HTTP_OK);
     }
@@ -66,24 +65,8 @@ class TransactionController extends AbstractController
      */
     public function marginProfit(): JsonResponse
     {
-        $marginProfit = $this->transaction->createQueryBuilder('s')
-            ->select('SUM(s.profit)')
-            ->getQuery()
-            ->getSingleScalarResult();
+        $marginProfit = $this->transaction->calculateMarginProfit();
 
-        return new JsonResponse(['marginProfit' => (float) $marginProfit], Response::HTTP_OK);
-    }
-
-    /**
-     * @Route("/api/transaction/stock", name="stock_count", methods={"GET"})
-     * @return JsonResponse
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function stockCount(): JsonResponse
-    {
-        $stockCount = $this->transaction->stockCount();
-
-        return new JsonResponse(['stock' => $stockCount], Response::HTTP_OK);
+        return new JsonResponse(['marginProfit' => $marginProfit], Response::HTTP_OK);
     }
 }

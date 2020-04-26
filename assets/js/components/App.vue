@@ -27,7 +27,6 @@
                         <input type="number" v-model="action.price" :disabled="action.status === 1" />
                         <div>
                             <span class="error">{{ errors[0] }}</span>
-                            <span class="error" v-if="customError && index === actionList.length - 1">{{customError}}</span>
                         </div>
 
                     </div>
@@ -81,8 +80,7 @@
             return {
                 actionList: [],
                 stock: 0,
-                profit: null,
-                customError: null,
+                profit: '',
                 buttonDisabled: false,
                 responseError: '',
                 inputDisable: true,
@@ -97,28 +95,20 @@
                 });
             },
             async submitAction(index, type) {
-                if (this.errors){
-                    console.log(this.errors)
-                }
-                if (type === 2 && this.actionList[index].quantity > this.stock) {
-                    Vue.set(this, 'customError', `Current available stock is ${this.stock}`);
+                Vue.set(this, 'responseError', null);
+                const url = '/api/transaction';
+                const data = {
+                    quantity: parseInt(this.actionList[index].quantity),
+                    price: parseInt(this.actionList[index].price),
+                    type: type
+                };
+                const response = await postRequest(url, data);
+                if (response.data.status === 'error'){
+                    Vue.set(this, 'responseError', response.data.error.message);
                 } else {
-                    Vue.set(this, 'customError', null);
-                    const url = '/api/transaction';
-                    const data = {
-                        quantity: parseInt(this.actionList[index].quantity),
-                        price: parseInt(this.actionList[index].price),
-                        type: type
-                    };
-                    const response = await postRequest(url, data);
-                    console.log('action response', response);
-                    if (response.data.status === 'error'){
-                        Vue.set(this, 'responseError', response.data.error.message)
-                    } else {
-                        await Vue.set(this.actionList[index], 'status', 1);
-                        await Vue.set(this.actionList[index], 'type', type);
-                        await this.getStock();
-                    }
+                    await Vue.set(this.actionList[index], 'status', 1);
+                    await Vue.set(this.actionList[index], 'type', type);
+                    await this.getStock();
                 }
             },
             async getTransactions() {
@@ -129,17 +119,12 @@
             async getMarginProfit() {
                 const url = '/api/transaction/profit';
                 const response = await getRequest(url, {});
-                Vue.set(this, 'profit', response.data.marginProfit);
+                const marginProfit = response.data.marginProfit
+                Vue.set(this, 'profit', marginProfit.toString());
             },
-            async getStock() {
-                const url = '/api/transaction/stock';
-                const response = await getRequest(url, {});
-                Vue.set(this, 'stock', response.data.stock);
-            }
         },
         mounted() {
             this.getTransactions();
-            this.getStock();
         },
         components: {
           ValidationProvider,
