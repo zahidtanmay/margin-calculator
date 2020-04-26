@@ -23,7 +23,6 @@ class TransactionsRepository extends ServiceEntityRepository
     use Validator;
     private $em;
     private $stock;
-    private $validator;
 
     public function __construct(ManagerRegistry $registry, EntityManagerInterface $em, StockRepository $stock)
     {

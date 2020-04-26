@@ -8,7 +8,6 @@ use App\Entity\Stock;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @method Stock|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,18 +21,16 @@ class StockRepository extends ServiceEntityRepository
      * @var EntityManagerInterface
      */
     private $em;
-    private $vi;
 
     /**
      * StockRepository constructor.
      * @param ManagerRegistry $registry
      * @param EntityManagerInterface $em
      */
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $em, ValidatorInterface $vi)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $em)
     {
         parent::__construct($registry, Stock::class);
         $this->em = $em;
-        $this->vi = $vi;
     }
 
     /**
@@ -62,7 +59,6 @@ class StockRepository extends ServiceEntityRepository
         $stock
             ->setQuantity($quantity)
             ->setPrice($price);
-        $errors = $this->vi->validate($stock);
         $this->em->persist($stock);
         $this->em->flush();
     }
