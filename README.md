@@ -23,7 +23,7 @@ Then run
        
 You are ready to go.
 
-####Usage
+#### Usage
 
 When you browse your homepage directory, there will be two buttons `Add` and `Calculate Profit`.
 
@@ -32,7 +32,7 @@ You can add any sequence of `Buy` or `Sell` operation.
 
 `Calculate Profit` will give you the output of total margin profit upon your given data.
 
-####Methodology
+#### Methodology
 For this project tow database tables are used.
 - `transaction` table used for each `Buy` and `Sell`.
 - `stock` table used for each buy entry and keep track of the items calculating profit for each `Sell`.
@@ -43,7 +43,7 @@ For this project tow database tables are used.
 
 - Total margin profit is retrieved by the sum of profit column of `transaction` table.
 
-####Benchmark Report
+#### Benchmark Report
 (Used Homestead vagrant box with CPUS - 1 & Memory - 2048 MB)
 ```
 Benchmarking margin-calculator.test (be patient).....done
