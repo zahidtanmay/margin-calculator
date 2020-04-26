@@ -18,7 +18,7 @@ class ErrorController extends AbstractController
      * @param FlattenException $exception
      * @return JsonResponse
      */
-    public function show(FlattenException $exception):JsonResponse
+    public function show(FlattenException $exception): JsonResponse
     {
         return new JsonResponse([
             'status' => 'error',

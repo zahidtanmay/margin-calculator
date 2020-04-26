@@ -38,7 +38,7 @@ class StockRepository extends ServiceEntityRepository
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function countStock():int
+    public function countStock(): int
     {
         $count = $this
             ->createQueryBuilder('s')
@@ -78,7 +78,7 @@ class StockRepository extends ServiceEntityRepository
     /**
      * @param Stock $stock
      */
-    public function delete(Stock $stock):void
+    public function delete(Stock $stock): void
     {
         $this->em->remove($stock);
         $this->em->flush();

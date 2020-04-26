@@ -37,7 +37,7 @@ class TransactionsRepository extends ServiceEntityRepository
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getTransactions():array
+    public function getTransactions(): array
     {
         $transactions = $this->findAll();
         $data = [];
@@ -60,14 +60,14 @@ class TransactionsRepository extends ServiceEntityRepository
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function saveTransaction(array $data):void
+    public function saveTransaction(array $data): void
     {
         $transaction = new Transactions();
         $stockCount = (int) $this->stock->countStock();
         $profit = 0;
-        $type = $data['type']??null;
-        $quantity = $data['quantity']??null;
-        $price = $data['price']??null;
+        $type = $data['type'] ?? null;
+        $quantity = $data['quantity'] ?? null;
+        $price = $data['price'] ?? null;
 
         if (empty($type) || empty($quantity) || empty($price)) {
             throw new NotFoundHttpException('Expecting mandatory parameters!');
@@ -111,7 +111,7 @@ class TransactionsRepository extends ServiceEntityRepository
      * @param float $price
      * @return float
      */
-    private function calculateProfit(int $quantity, float $price):float
+    private function calculateProfit(int $quantity, float $price): float
     {
         $tempQuantity = $quantity;
         $profit = 0;
