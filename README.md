@@ -33,10 +33,18 @@ You can add any sequence of `Buy` or `Sell` operation.
 `Calculate Profit` will give you the output of total margin profit upon your given data.
 
 ####Methodology
-Basically 
+For this project tow database tables are used.
+- `transaction` table used for each `Buy` and `Sell`.
+- `stock` table used for each buy entry and keep track of the items calculating profit for each `Sell`.
+
+- For each sell it fetched the first row of `stock` and compares with stock quantity and calculates profit.
+    * If stock quantity is less than current sell quantity it deletes the row and fetch next row.
+    * Else it updates the current row with adjusted quantity.
+
+- Total margin profit is retrieved by the sum of profit column of `transaction` table.
 
 ####Benchmark Report
-(Used Homestead vagrant box with CPUS - 1, Memory - 2048 MB)
+(Used Homestead vagrant box with CPUS - 1 & Memory - 2048 MB)
 ```
 Benchmarking margin-calculator.test (be patient).....done
 

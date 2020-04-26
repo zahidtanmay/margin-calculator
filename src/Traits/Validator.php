@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 trait Validator
 {
-    public function transactionValidate(int $type, int $quantity, float $price, int $stockCount):void
+    public function transactionValidate(int $type, int $quantity, float $price, int $stockCount): void
     {
 
         if ($type !== 1 && $type !== 2) {
@@ -28,3 +28,4 @@ trait Validator
         }
     }
 }
+
